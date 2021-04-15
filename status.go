@@ -380,18 +380,6 @@ func (c *Client) UploadMediaFromMedia(ctx context.Context, media *Media) (*Attac
 }
 
 // GetTimelineDirect return statuses from direct timeline.
-func (c *Client) GetTimelineDirect(ctx context.Context, pg *Pagination) ([]*Status, error) {
-	params := url.Values{}
-
-	var statuses []*Status
-	err := c.doAPI(ctx, http.MethodGet, "/api/v1/timelines/direct", params, &statuses, pg)
-	if err != nil {
-		return nil, err
-	}
-	return statuses, nil
-}
-
-// GetTimelineDirect return statuses from direct timeline.
 func (c Client) GetTimelineDirect(ctx context.Context, pg *Pagination) ([]Status, error) {
 	params := url.Values{}
 
