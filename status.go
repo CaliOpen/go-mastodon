@@ -249,26 +249,6 @@ func (c *Client) GetTimelineHome(ctx context.Context, pg *Pagination) ([]*Status
 	return statuses, nil
 }
 
-// GetTimelineDirect return statuses from direct timeline.
-func (c Client) GetTimelineDirect(ctx context.Context, pg *Pagination) ([]Status, error) {
-	params := url.Values{}
-
-	var conversations []*Conversation
-	err := c.doAPI(ctx, http.MethodGet, "/api/v1/conversations", params, &conversations, pg)
-	if err != nil {
-		return nil, err
-	}
-
-	statuses := make([]*Status, 0, 40)
-
-	for _, d := range conversations {
-		s := d.LastStatus
-		statuses = append(statuses, s)
-	}
-
-	return statuses, nil
-}
-
 // GetTimelinePublic return statuses from public timeline.
 func (c *Client) GetTimelinePublic(ctx context.Context, isLocal bool, pg *Pagination) ([]*Status, error) {
 	params := url.Values{}
@@ -411,8 +391,8 @@ func (c *Client) GetTimelineDirect(ctx context.Context, pg *Pagination) ([]*Stat
 	return statuses, nil
 }
 
-// GetConversations return direct conversations.
-func (c *Client) GetConversations(ctx context.Context, pg *Pagination) ([]*Conversation, error) {
+// GetTimelineDirect return statuses from direct timeline.
+func (c Client) GetTimelineDirect(ctx context.Context, pg *Pagination) ([]Status, error) {
 	params := url.Values{}
 
 	var conversations []*Conversation
@@ -420,7 +400,15 @@ func (c *Client) GetConversations(ctx context.Context, pg *Pagination) ([]*Conve
 	if err != nil {
 		return nil, err
 	}
-	return conversations, nil
+
+	statuses := make([]*Status, 0, 40)
+
+	for _, d := range conversations {
+		s := d.LastStatus
+		statuses = append(statuses, s)
+	}
+
+	return statuses, nil
 }
 
 // DeleteConversation delete the conversation specified by id.
